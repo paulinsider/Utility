@@ -1,0 +1,8 @@
+adb connect 127.0.0.1:62001 (:52001)
+
+adb shell screencap -p /sdcard/screen.png
+adb pull /sdcard/screen.png c:/a/screen.png
+
+adb shell input tap 250 250
+adb shell input keyevent 4 (3: home, 4: back)
+adb shell input swipe 250 250 300 300
