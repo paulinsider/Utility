@@ -31,8 +31,7 @@ const back = 'adb\\adb shell input keyevent 4'
 
 
 const swipePage = `adb\\adb shell input swipe ${x/2} 1000 ${x/2} ${header} 500`
-process.execSync(swipePage)
-return 
+
 async function loop() {
   process.execSync(tap1)
   await sleep()
