@@ -26,39 +26,43 @@ const tap3 = `adb\\adb shell input tap ${x / 4} ${header + goodItem/2 * 3}`
 const tap4 = `adb\\adb shell input tap ${x / 4 * 3} ${header + goodItem/2 * 3}`
 const tap5 = `adb\\adb shell input tap ${x / 4} ${header + goodItem/2 * 5}`
 const tap6 = `adb\\adb shell input tap ${x / 4 * 3} ${header + goodItem/2 * 5}`
-
+const taps = {tap1, tap2, tap3, tap4, tap5, tap6}
 const back = 'adb\\adb shell input keyevent 4'
 
 
 const swipePage = `adb\\adb shell input swipe ${x/2} 1000 ${x/2} ${header} 500`
 
 async function loop() {
-  process.execSync(tap1)
-  await sleep()
-  process.execSync(back)
-  await sleep()
-  process.execSync(tap2)
-  await sleep()
-  process.execSync(back)
-  await sleep()
-  process.execSync(tap3)
-  await sleep()
-  process.execSync(back)
-  await sleep()
-  process.execSync(tap4)
-  await sleep()
-  process.execSync(back)
-  await sleep()
-  process.execSync(tap5)
-  await sleep()
-  process.execSync(back)
-  await sleep()
-  process.execSync(tap6)
-  await sleep()
-  process.execSync(back)
-  await sleep()
+
+
+  for (let i = 1; i <= 6; i ++) {
+    await good('tap' + i)
+  }
+  
   process.execSync(swipePage)
   await sleep()
+}
+
+async function good(tap) {
+  process.execSync(taps[tap])
+  await sleep()
+  await moreBuy()
+  process.execSync(back)
+  await sleep()
+  process.execSync(back)
+}
+
+async function moreBuy() {
+  const top = `adb\\adb shell input swipe 360 910 360 380`
+  const tap = `adb\\adb shell input tap 675 550`
+  const loadMore = `adb\\adb shell input swipe 360 1070 360 220`
+
+  process.execSync(top)
+  await sleep(500)
+  process.execSync(tap)
+  process.execSync(loadMore)
+  process.execSync(back)
+  await sleep(1000)
 }
 
 async function sleep(delay = 1500) {
@@ -81,6 +85,10 @@ async function sleep(delay = 1500) {
   process.execSync('adb\\adb shell am start -n com.shizhuang.duapp/com.shine.ui.home.SplashActivity')
   await sleep(6000)
   process.execSync(swipeTop)
+  await sleep()
+  process.execSync(swipeLeft)
+  await sleep()
+  process.execSync(swipeLeft)
   await sleep()
   process.execSync(swipeLeft)
   await sleep()
