@@ -9,13 +9,15 @@ const opts = {
     deviceName: "Android Emulator",
     appPackage: "com.shizhuang.duapp",
     appActivity: "com.shine.ui.home.SplashActivity",
-    automationName: "UiAutomator"
+    automationName: "UiAutomator",
+    noReset: false,
   }
 };
 
 (async function() {
-  const client = wdio.remote(opts);
-  let moreBuyEl = await driver.element("com.shizhuang.duapp:id/tv_sold_all",);
+  const client = await wdio.remote(opts);
+  console.log(client)
+  let moreBuyEl = await client.findElementById("com.shizhuang.duapp:id/tv_sold_all",);
 
   await moreBuyEl.click();
 
