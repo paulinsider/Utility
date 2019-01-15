@@ -2,7 +2,8 @@ const process = require('child_process');
 
 const x = 720
 const y = 1280
-const header = 146;
+const header = 240;
+const offsetTop = 337;
 const goodItem = 442;
 
 
@@ -15,18 +16,16 @@ const goodItem = 442;
 
 
 // 向右切换 tablayout
-const swipeLeft = `adb\\adb shell input swipe ${x - 100} ${header + goodItem} ${x - 400} ${header + goodItem}`
+const swipeLeft = `adb\\adb shell input swipe ${x - 100} ${header + offsetTop + goodItem} ${x - 400} ${header + offsetTop + goodItem}`
 
 // 收起 头
-const swipeTop = `adb\\adb shell input swipe ${x/2} ${header + goodItem} ${x/2} ${header}`
+const swipeTop = `adb\\adb shell input swipe ${x/2} ${offsetTop + goodItem + header} ${x/2} ${goodItem + header}`
 
 const tap1 = `adb\\adb shell input tap ${x / 4} ${header + goodItem/2}`
 const tap2 = `adb\\adb shell input tap ${x / 4 * 3} ${header + goodItem/2}`
 const tap3 = `adb\\adb shell input tap ${x / 4} ${header + goodItem/2 * 3}`
 const tap4 = `adb\\adb shell input tap ${x / 4 * 3} ${header + goodItem/2 * 3}`
-const tap5 = `adb\\adb shell input tap ${x / 4} ${header + goodItem/2 * 5}`
-const tap6 = `adb\\adb shell input tap ${x / 4 * 3} ${header + goodItem/2 * 5}`
-const taps = {tap1, tap2, tap3, tap4, tap5, tap6}
+const taps = {tap1, tap2, tap3, tap4,}
 const back = 'adb\\adb shell input keyevent 4'
 
 
@@ -34,7 +33,7 @@ const swipePage = `adb\\adb shell input swipe ${x/2} 1000 ${x/2} ${header} 500`
 
 async function loop() {
 
-  for (let i = 1; i <= 6; i ++) {
+  for (let i = 1; i <= 4; i ++) {
     await good('tap' + i)
   }
   
