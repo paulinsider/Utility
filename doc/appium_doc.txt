@@ -1,0 +1,63 @@
+driver.find_element_by_id("com.baidu.searchbox:id/baidu_searchbox").click()
+driver.find_element_by_id("com.baidu.searchbox:id/SearchTextInput").clear()
+driver.find_element_by_id("com.baidu.searchbox:id/SearchTextInput").send_keys('appium测试')
+
+https://www.cnblogs.com/yoyoketang/p/6189441.html
+driver.tap([(x,y),(x1,y1)],500)
+
+driver.swipe(100, 100, 100, 400)
+
+driver.flick(x1,y1,x2,y2) 住A点后快速滑动至B点
+
+driver.pinch(element)
+
+driver.zoom(element)
+
+重置应用(类似删除应用数据)
+
+用法 driver.reset()
+
+driver.hide_keyboard()
+
+dr.keyevent(‘4’)
+
+driver.press_ keycode(‘4’)
+
+long_press_keycode
+
+driver.wait_activity(‘.activity.xxx’,5,2) 等待指定的activity出现直到超时，interval为扫描间隔1秒
+用法 driver.background_app(5)   置后台5秒后再运行
+
+用法 driver.is_app_installed(“com.xxxx”)
+
+driver.install_app(app_path)
+
+
+driver.remove_app(“com.xxx.”)
+
+driver.launch_app()
+driver.start_activity(app_package, app_activity)
+
+
+用法 driver.lock()
+
+driver.shake()
+
+driver.open_notifications()
+
+driver.network_connection
+
+element.text()
+
+element.click()
+find_element_by_id
+
+find_elements_by_id
+
+find_element_by_name
+
+find_elements_by_name
+find_element_by_link_text
+
+
+
