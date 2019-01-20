@@ -4,6 +4,7 @@ from time import sleep
 import time
 import re
 import os
+import sys
 
 print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
@@ -68,6 +69,7 @@ def gotoAllSold():
   sn = soldNum()
   try:
     driver.swipe(x/2, y - 200 - y * 2 / 3, x/2, y - 200, 500)
+    sleep(1)
     allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
     allEl.click()
     sleep(1) # 进入记录页等待数据加载完成
@@ -87,8 +89,9 @@ def oneRowGood():
   for i in range(2):
     taps[i]()
     sleep(1)
-    gotoAllSold()
-    sleep(1)
+    if (len(sys.argv) >= 2):
+      gotoAllSold()
+      sleep(1)
     back()
     sleep(1)
 

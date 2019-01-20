@@ -4,6 +4,7 @@ from time import sleep
 import time
 import re
 import os
+import sys
 
 print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
@@ -96,8 +97,9 @@ def oneRowGood():
   for i in range(2):
     taps[i]() # 点击列表进入详情
     sleep(1)
-    gotoAllSold() # 去购买记录
-    sleep(1)
+    if (len(sys.argv) >= 2):
+      gotoAllSold() # 去购买记录
+      sleep(1)
     back() # 返回列表
     sleep(1)
 
