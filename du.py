@@ -5,7 +5,7 @@ import time
 import re
 import os
 
-print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
 desired_caps = {}
 desired_caps['platformName'] = 'Android'
@@ -18,7 +18,7 @@ desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
 os.system("adb\\adb connect 127.0.0.1:62001")
 
 driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
-
+quantity = 1
 x = 720
 y = 1280
 header = 146
@@ -29,22 +29,22 @@ def tabShose():
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
 
 def tap1():
-  driver.tap([(x / 4,     header + goodItem/2)], 500)
+  driver.tap([(x / 4,     header + goodItem/2)])
 def tap2():
-  driver.tap([(x / 4 * 3, header + goodItem/2)], 500)
+  driver.tap([(x / 4 * 3, header + goodItem/2)])
 def tap3():
-  driver.tap([(x / 4,     header + goodItem/2 * 3)], 500)
+  driver.tap([(x / 4,     header + goodItem/2 * 3)])
 def tap4():
-  driver.tap([(x / 4 * 3, goodItem/2 * 3)], 500)
+  driver.tap([(x / 4 * 3, goodItem/2 * 3)])
 def tap5():
-  driver.tap([(x / 4,     header + goodItem/2 * 5)], 500)
+  driver.tap([(x / 4,     header + goodItem/2 * 5)])
 def tap6():
-  driver.tap([(x / 4 * 3, header + goodItem/2 * 5)], 500)
+  driver.tap([(x / 4 * 3, header + goodItem/2 * 5)])
 
 taps = [tap1, tap2, tap3, tap4, tap5, tap6]
 
 def swipePage():
-  driver.swipe(x/2, 1000, x/2, header)
+  driver.swipe(x/2, 1000, x/2, header, 500)
 
 def back():
   os.system("adb\\adb shell input keyevent 4")
@@ -52,76 +52,70 @@ def back():
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
   driver.swipe(360, 700, 360, 246, 500)
+  sleep(1)
 
 def soldNum():
-  soldNumTxt = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_num').get_attribute('text')
-  print(soldNumTxt)
-  # 购买记录总条数
-  soldNum = re.findall('\d+',soldNumTxt)[0]
-  return int(soldNum)
+  visiblityAllSold()
+  global quantity
+  soldNum = 10
+  try:
+    soldNumTxt = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_num').get_attribute('text')
+    print(quantity, soldNumTxt)
+    # 购买记录总条数
+    soldNum = re.findall('\d+',soldNumTxt)[0]
+  except Exception:
+    print(quantity, "获取(全部)购买记录 crash")
+  finally:
+    return int(soldNum)
 def gotoAllSold():
-  sn = soldNum()
+  sn = soldNum() # 获取购买数量
   pageSize = 20
   pageVisibilite = 12
-  allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
-  if (allEl):
+  try:
+    allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
     allEl.click()
     count = int(sn / pageVisibilite) + 1
-    # if(count > 10):
-    count = 1
-    sleep(3) # 进入记录页等待数据加载完成
+    if(count > 1):
+      count = 1
+    sleep(1) # 进入记录页等待数据加载完成
     for i in range(count):
       for j in range(pageSize):
-        driver.swipe(x/2, y/2, x/2, y/2 - recordHeight, 500) # 每页20条数据
+        driver.swipe(x/2, y/2, x/2, y/2 - recordHeight) # 每页20条数据
 
-      driver.swipe(x/2, y/2, x/2, y/2 - recordHeight * 2, 500) # 上拉加载更多
-      sleep(3)
+      driver.swipe(x/2, y/2, x/2, y/2 - recordHeight * 2) # 上拉加载更多
+      sleep(1)
     back()
-
-def loop():
-  for i in range(len(taps)):
-    taps[i]()
-    sleep(1)
-    visiblityAllSold()
-    sleep(1)
-    gotoAllSold()
-    sleep(1)
-    back()
-    sleep(1)
-def start():
-  
-  tabShose()
-  sleep(3)
-
-  while(True):
-    loop()
-    swipePage()
-    sleep(3)
+  except Exception:
+    print("点击(全部)购买记录 crash")
+  finally:
+    global quantity
+    quantity = quantity + 1
 
 def oneRowGood():
   for i in range(2):
-    taps[i]()
+    taps[i]() # 点击列表进入详情
     sleep(1)
-    visiblityAllSold()
+    gotoAllSold() # 去购买记录
     sleep(1)
-    gotoAllSold()
-    sleep(1)
-    back()
+    back() # 返回列表
     sleep(1)
 
 def run():
   tabShose()
-  sleep(3)
+  sleep(1)
 
   while(True):
     
     for i in range(7):
       oneRowGood()
-      driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2) # 
-      sleep(1)
-    driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
-    sleep(3)
+      driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2, 500) # 
+      sleep(0.5)
+    driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 加载更多
+    sleep(1)
 
 # 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(5)
-run()
+try:
+  run()
+finally:
+  print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
