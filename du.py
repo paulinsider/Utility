@@ -79,9 +79,10 @@ def gotoAllSold():
     #   count = 1
     sleep(1) # 进入记录页等待数据加载完成
     for i in range(count):
-      for j in range(pageSize):
-        driver.swipe(x/2, y/2, x/2, y/2 - recordHeight) # 每页20条数据
-
+      # for j in range(pageSize):
+      driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
+      driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
+      
       driver.swipe(x/2, y/2, x/2, y/2 - recordHeight * 2) # 上拉加载更多
       sleep(1)
     back()

@@ -5,7 +5,7 @@ import time
 import re
 import os
 
-print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
 desired_caps = {}
 desired_caps['platformName'] = 'Android'
@@ -18,7 +18,7 @@ desired_caps['appActivity'] = 'com.nice.main.activities.MainActivity_'
 os.system("adb\\adb connect 127.0.0.1:62001")
 
 driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
-
+quantity = 1
 x = 720
 y = 1280
 header = 240
@@ -48,32 +48,38 @@ def back():
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
   driver.swipe(x/2, y - 200, x/2, y - 200 - y * 2 / 3, 500)
+  sleep(1)
 
 def soldNum():
-  snEl = driver.find_element_by_id('com.nice.main:id/tv_title')
-  if (snEl):
+  visiblityAllSold()
+  global quantity
+  soldNum = 10
+  try:
+    snEl = driver.find_element_by_id('com.nice.main:id/tv_title')
     soldNumTxt = snEl.get_attribute('text')
-    print(soldNumTxt)
+    print(quantity, soldNumTxt)
     # 购买记录总条数
     soldNum = re.findall('\d+',soldNumTxt)[0]
-    return int(soldNum)
-  else:
-    return 0
+  except Exception:
+    print(quantity, "获取(全部)购买记录 crash")
+  finally:
+    return soldNum
 def gotoAllSold():
-  # sn = soldNum()
-  # pageSize = 20
-  # pageVisibilite = 12
-  # driver.swipe(x/2, y - 200 - y * 2 / 3, x/2, y - 200, 500)
-  allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
-  if (allEl):
+  sn = soldNum()
+  try:
+    driver.swipe(x/2, y - 200 - y * 2 / 3, x/2, y - 200, 500)
+    allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
     allEl.click()
-    
     sleep(1) # 进入记录页等待数据加载完成
-    for i in range(30):
+    for i in range(sn):
       driver.swipe(x/2, y * 2 / 3, x/2, 200 , 500) # 上拉加载更多
       sleep(1)
-      
     back()
+  except Exception:
+    print("点击(全部)购买记录 crash")
+  finally:
+    global quantity
+    quantity = quantity + 1
 
 
 
@@ -81,8 +87,6 @@ def oneRowGood():
   for i in range(2):
     taps[i]()
     sleep(1)
-    # visiblityAllSold()
-    # sleep(1)
     gotoAllSold()
     sleep(1)
     back()
@@ -100,8 +104,10 @@ def run():
       driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2) # 
       sleep(1)
     driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
-    sleep(3)
+    sleep(1)
 
-# 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(1)
-run()
+try:
+  run()
+finally:
+  print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
