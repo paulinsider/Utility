@@ -75,8 +75,8 @@ def gotoAllSold():
     allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
     allEl.click()
     count = int(sn / pageVisibilite) + 1
-    if(count > 1):
-      count = 1
+    # if(count > 1):
+    #   count = 1
     sleep(1) # 进入记录页等待数据加载完成
     for i in range(count):
       for j in range(pageSize):
