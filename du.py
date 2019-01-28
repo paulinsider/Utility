@@ -100,7 +100,9 @@ def oneRowGood():
     if (len(sys.argv) >= 2):
       gotoAllSold() # 去购买记录
       sleep(1)
-    back() # 返回列表
+    currentActivity = driver.current_activity
+    if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
+      back()
     sleep(1)
 
 def run():
@@ -111,14 +113,19 @@ def run():
     
     for i in range(7):
       oneRowGood()
-      driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2, 500) # 
-      sleep(0.5)
-    driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 加载更多
+      try:
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 
+      except Exception:
+        print("swipe crash")
+      sleep(1)
+    # driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 加载更多
     sleep(1)
 
 # 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(5)
 try:
   run()
+except Exception:
+  print("run crash")
 finally:
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
