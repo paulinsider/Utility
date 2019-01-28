@@ -15,6 +15,7 @@ desired_caps['noReset'] = True
 desired_caps['deviceName'] = 'Android Emulator'
 desired_caps['appPackage'] = 'com.nice.main'
 desired_caps['appActivity'] = 'com.nice.main.activities.MainActivity_'
+desired_caps['sessionOverride'] = False
 
 os.system("adb\\adb connect 127.0.0.1:62001")
 
@@ -106,7 +107,11 @@ def run():
     
     for i in range(7):
       oneRowGood()
-      driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2) # 
+      try:
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
+      except Exception:
+        print("swipe crash")
+
       sleep(1)
     # driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
     sleep(1)
@@ -114,5 +119,7 @@ def run():
 sleep(1)
 try:
   run()
+except Exception:
+  print("run crash")
 finally:
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
