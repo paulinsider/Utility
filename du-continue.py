@@ -108,6 +108,11 @@ def oneRowGood():
 def run():
   tabShose()
   sleep(1)
+  for t in range(400):
+    try:
+      driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
+    except Exception:
+      print("swipe history crash")
 
   while(True):
     
