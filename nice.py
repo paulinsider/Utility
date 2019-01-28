@@ -92,7 +92,9 @@ def oneRowGood():
     if (len(sys.argv) >= 2):
       gotoAllSold()
       sleep(1)
-    back()
+    currentActivity = driver.current_activity
+    if ('.shop.detail.ShopSkuDetailActivity_' == currentActivity):
+      back()
     sleep(1)
 
 def run():
@@ -106,7 +108,7 @@ def run():
       oneRowGood()
       driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2) # 
       sleep(1)
-    driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
+    # driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
     sleep(1)
 
 sleep(1)
