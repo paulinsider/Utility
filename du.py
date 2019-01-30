@@ -30,9 +30,15 @@ def tabShose():
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
 
 def tap1():
-  driver.tap([(x / 4,     header + goodItem/2)])
+  try:
+    driver.tap([(x / 4,     header + goodItem/2)])
+  except Exception:
+    print("tap 1 Exception")
 def tap2():
-  driver.tap([(x / 4 * 3, header + goodItem/2)])
+  try:
+    driver.tap([(x / 4 * 3, header + goodItem/2)])
+  except Exception:
+    print("tap 2 Exception")
 def tap3():
   driver.tap([(x / 4,     header + goodItem/2 * 3)])
 def tap4():
@@ -70,6 +76,8 @@ def soldNum():
     return int(soldNum)
 def gotoAllSold():
   sn = soldNum() # 获取购买数量
+  if(sn > 2000):
+    sn = 2000
   pageSize = 20
   pageVisibilite = 12
   try:
@@ -79,13 +87,10 @@ def gotoAllSold():
     # if(count > 1):
     #   count = 1
     sleep(1) # 进入记录页等待数据加载完成
-    for i in range(count):
-      # for j in range(pageSize):
-      driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
-      driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
-      
-      driver.swipe(x/2, y/2, x/2, y/2 - recordHeight * 2) # 上拉加载更多
-      sleep(1)
+    if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
+      for i in range(count):
+        # for j in range(pageSize):
+        driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
     back()
   except Exception:
     print("点击(全部)购买记录 crash")
@@ -108,7 +113,12 @@ def oneRowGood():
 def run():
   tabShose()
   sleep(1)
-
+  if (len(sys.argv) >= 3):
+    for t in range(int(sys.argv[2])):
+      try:
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
+      except Exception:
+        print("swipe history crash")
   while(True):
     
     for i in range(7):
