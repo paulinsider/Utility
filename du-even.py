@@ -6,13 +6,13 @@ import re
 import os
 import sys
 
-print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
+print('[执行开始 even]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始 even]")
 
 desired_caps = {}
 desired_caps['platformName'] = 'Android'
 desired_caps['platformVersion'] = '4.4.2' # 要跟模拟器版本完全一致
 desired_caps['noReset'] = True
-desired_caps['deviceName'] = 'Android Emulator'
+desired_caps['deviceName'] = '127.0.0.1:62001'
 desired_caps['appPackage'] = 'com.shizhuang.duapp'
 desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
 
@@ -94,43 +94,31 @@ def gotoAllSold():
     quantity = quantity + 1
 
 def oneRowGood():
-  for i in range(2):
-    taps[i]() # 点击列表进入详情
+  # for i in range(2):
+  tap1() # 点击列表进入详情
+  sleep(1)
+  if (len(sys.argv) >= 2):
+    gotoAllSold() # 去购买记录
     sleep(1)
-    if (len(sys.argv) >= 2):
-      gotoAllSold() # 去购买记录
-      sleep(1)
-    currentActivity = driver.current_activity
-    if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
-      back()
-    sleep(1)
+  back() # 返回列表
+  sleep(1)
 
 def run():
   tabShose()
   sleep(1)
-  for t in range(400):
-    try:
-      driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
-    except Exception:
-      print("swipe history crash")
 
   while(True):
     
     for i in range(7):
       oneRowGood()
-      try:
-        driver.swipe(x/2, y/2, x/2, y/2 - goodItem * 2 / 3, 500) # 
-      except Exception:
-        print("swipe crash")
-      sleep(1)
-    # driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 加载更多
+      driver.swipe(x/2, y/2, x/2, y/2 - goodItem / 3 * 2, 500) # 
+      sleep(0.5)
+    driver.swipe(x/2, y/2, x/2, y/2 - goodItem, 500) # 加载更多
     sleep(1)
 
 # 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(5)
 try:
   run()
-except Exception:
-  print("run crash")
 finally:
-  print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
+  print('[执行结束 even]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束even]')

@@ -26,6 +26,8 @@ header = 146
 goodItem = 354
 recordHeight = 88
 
+rows = 0
+
 def tabShose():
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
 
@@ -75,9 +77,27 @@ def soldNum():
   finally:
     return int(soldNum)
 
-def gotoAllSold():
-  if ('com.shine.ui.mall.ProductDetailActivity' != currentActivity):
+onePs = None
+twoPs = None
+
+def gotoAllSold(i):
+  if ('com.shine.ui.mall.ProductDetailActivity' != driver.current_activity):
     return
+  global onePs
+  global twoPs
+  if (i == 0):
+    cPs = driver.page_source
+    if (cPs == onePs):
+      return
+    else:
+      onePs = cPs
+  else:
+    cPs = driver.page_source
+    if (cPs == twoPs):
+      return
+    else:
+      twoPs = cPs
+  visiblityAllSold()
   try:
     allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
     allEl.click()
@@ -85,6 +105,8 @@ def gotoAllSold():
     if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
       beforeSource = None
       for i in range(100000):
+        if ('com.shine.ui.mall.SoldListActivity' != driver.current_activity):
+          break
         driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
         currentSource = driver.page_source
         if (currentSource == beforeSource):
@@ -99,11 +121,13 @@ def gotoAllSold():
     quantity = quantity + 1
 
 def oneRowGood():
+  global rows
+  rows = rows + 1
   for i in range(2):
     taps[i]() # 点击列表进入详情
     sleep(1)
     if (len(sys.argv) >= 2):
-      gotoAllSold() # 去购买记录
+      gotoAllSold(i) # 去购买记录
       sleep(1)
     currentActivity = driver.current_activity
     if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
@@ -124,7 +148,7 @@ def run():
     for i in range(7):
       oneRowGood()
       try:
-        driver.swipe(x/2, y/2, x/2, y/2 - goodItem * 2 / 3, 500) # 
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem * 9 / 10) # 
       except Exception:
         print("swipe crash")
       sleep(1)
@@ -138,4 +162,8 @@ try:
 except Exception:
   print("run crash")
 finally:
+  global rows
+  f = open('du-rows.txt', 'w')
+  f.write(str(rows))
+  f.close
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')

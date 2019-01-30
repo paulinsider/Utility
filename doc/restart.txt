@@ -1,0 +1,5 @@
+taskkill /im Fiddler.exe /f
+
+start "" "C:\Users\huben\AppData\Local\Programs\Fiddler\Fiddler.exe"
+
+C:\Users\快追互娱\AppData\Local\Programs\Fiddler\Fiddler.exe
