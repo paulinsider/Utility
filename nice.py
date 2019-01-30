@@ -36,9 +36,15 @@ def tabShose():
   
 
 def tap1():
-  driver.tap([(x / 4,     header + goodItem/2)], 500)
+  try:
+    driver.tap([(x / 4,     header + goodItem/2)], 500)
+  except Exception:
+    print("tap 1 Exception")
 def tap2():
-  driver.tap([(x / 4 * 3, header + goodItem/2)], 500)
+  try:
+    driver.tap([(x / 4 * 3, header + goodItem/2)], 500)
+  except Exception:
+    print("tap 2 Exception")
 
 taps = [tap1, tap2]
 
@@ -67,16 +73,15 @@ def soldNum():
   finally:
     return soldNum
 def gotoAllSold():
-  sn = soldNum()
+  # sn = soldNum()
   try:
-    driver.swipe(x/2, y - 200 - y * 2 / 3, x/2, y - 200, 500)
     sleep(1)
     allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
     allEl.click()
     sleep(1) # 进入记录页等待数据加载完成
-    for i in range(sn):
-      driver.swipe(x/2, y * 2 / 3, x/2, 200 , 500) # 上拉加载更多
-      sleep(1)
+    if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
+      for i in range(50):
+        driver.swipe(x/2, y * 2 / 3, x/2, 200 , 500) # 上拉加载更多
     back()
   except Exception:
     print("点击(全部)购买记录 crash")
@@ -103,12 +108,18 @@ def run():
   sleep(1)
   driver.swipe(x/2, offsetTop + goodItem + header, x/2, goodItem + header)
   sleep(1)
+  if (len(sys.argv) >= 3):
+    for t in range(int(sys.argv[2])):
+      try:
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
+      except Exception:
+        print("swipe history crash")
+
   while(True):
-    
     for i in range(7):
       oneRowGood()
       try:
-        driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
+        driver.swipe(x/2, y/2, x/2, y/2 - goodItem * 2 / 3) # 
       except Exception:
         print("swipe crash")
 
