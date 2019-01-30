@@ -74,23 +74,23 @@ def soldNum():
     print(quantity, "获取(全部)购买记录 crash")
   finally:
     return int(soldNum)
+
 def gotoAllSold():
-  sn = soldNum() # 获取购买数量
-  if(sn > 2000):
-    sn = 2000
-  pageSize = 20
-  pageVisibilite = 12
+  if ('com.shine.ui.mall.ProductDetailActivity' != currentActivity):
+    return
   try:
     allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
     allEl.click()
-    count = int(sn / pageVisibilite) + 1
-    # if(count > 1):
-    #   count = 1
     sleep(1) # 进入记录页等待数据加载完成
     if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
-      for i in range(count):
-        # for j in range(pageSize):
+      beforeSource = None
+      for i in range(100000):
         driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
+        currentSource = driver.page_source
+        if (currentSource == beforeSource):
+          break
+        else:
+          beforeSource = currentSource
     back()
   except Exception:
     print("点击(全部)购买记录 crash")

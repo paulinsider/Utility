@@ -72,16 +72,24 @@ def soldNum():
     print(quantity, "获取(全部)购买记录 crash")
   finally:
     return soldNum
+
 def gotoAllSold():
-  # sn = soldNum()
+  if ('.shop.detail.ShopSkuDetailActivity_' != driver.current_activity):
+    return
   try:
     sleep(1)
     allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
     allEl.click()
     sleep(1) # 进入记录页等待数据加载完成
     if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
-      for i in range(50):
-        driver.swipe(x/2, y * 2 / 3, x/2, 200 , 500) # 上拉加载更多
+      beforeSource = None
+      for i in range(100000):
+        driver.swipe(x/2, y * 2 / 3, x/2, 200) # 上拉加载更多
+        currentSource = driver.page_source
+        if (currentSource == beforeSource):
+          break
+        else:
+          beforeSource = currentSource
     back()
   except Exception:
     print("点击(全部)购买记录 crash")
