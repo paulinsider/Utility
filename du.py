@@ -104,7 +104,7 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
       beforeSource = None
-      for i in range(100000):
+      for i in range(80):
         if ('com.shine.ui.mall.SoldListActivity' != driver.current_activity):
           break
         driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
@@ -124,6 +124,8 @@ def oneRowGood():
   global rows
   rows = rows + 1
   for i in range(2):
+    if ('com.shine.ui.home.HomeActivity' != driver.current_activity):
+      return
     taps[i]() # 点击列表进入详情
     sleep(1)
     if (len(sys.argv) >= 2):
@@ -162,7 +164,6 @@ try:
 except Exception:
   print("run crash")
 finally:
-  global rows
   f = open('du-rows.txt', 'w')
   f.write(str(rows))
   f.close

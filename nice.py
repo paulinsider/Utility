@@ -100,7 +100,7 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
       beforeSource = None
-      for i in range(100000):
+      for i in range(80):
         if ('.shop.record.SkuRecordActivity_' != driver.current_activity):
           break
         driver.swipe(x/2, y * 2 / 3, x/2, 200) # 上拉加载更多
@@ -122,6 +122,8 @@ def oneRowGood():
   global rows
   rows = rows + 1
   for i in range(2):
+    if ('.activities.MainActivity_' != driver.current_activity):
+      return
     taps[i]()
     sleep(1)
     if (len(sys.argv) >= 2):
@@ -162,8 +164,7 @@ try:
 except Exception:
   print("run crash")
 finally:
-  global rows
-  f = open('du-rows.txt', 'w')
+  f = open('nice-rows.txt', 'w')
   f.write(str(rows))
   f.close
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
