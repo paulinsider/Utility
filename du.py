@@ -6,6 +6,8 @@ import re
 import os
 import sys
 
+import datetime
+
 print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
 desired_caps = {}
@@ -104,16 +106,33 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
       beforeSource = None
-      for i in range(80):
+      for i in range(100):
         if ('com.shine.ui.mall.SoldListActivity' != driver.current_activity):
           break
         driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
+        
         currentSource = driver.page_source
         if (currentSource == beforeSource):
           break
         else:
           beforeSource = currentSource
+
+        try:
+          dates = driver.find_elements_by_id('com.shizhuang.duapp:id/tv_date')
+          date = dates[-1].get_attribute('text')
+          strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
+          strftime2 = datetime.datetime.strptime("2018-12-31", "%Y-%m-%d")
+          if(strftime < strftime2):
+            break
+        except Exception:
+          # print('')
+          t = None
     back()
+    if ('com.shine.ui.trend.TrendAddNewActivity' == driver.current_activity):
+      try:
+        driver.find_element_by_android_uiautomator('text("确定")').click()
+      except Exception:
+        print("click sure back")
   except Exception:
     print("点击(全部)购买记录 crash")
   finally:

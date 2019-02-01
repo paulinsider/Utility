@@ -6,6 +6,8 @@ import re
 import os
 import sys
 
+import datetime
+
 print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
 desired_caps = {}
@@ -100,7 +102,7 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
       beforeSource = None
-      for i in range(80):
+      for i in range(100):
         if ('.shop.record.SkuRecordActivity_' != driver.current_activity):
           break
         driver.swipe(x/2, y * 2 / 3, x/2, 200) # 上拉加载更多
@@ -109,6 +111,19 @@ def gotoAllSold(i):
           break
         else:
           beforeSource = currentSource
+
+        try:
+          dates = driver.find_elements_by_id('com.nice.main:id/tv_deal_time')
+          date = dates[-1].get_attribute('text')
+          dm = strftime = datetime.datetime.strptime(date, "%m月%d日")
+
+          cm = datetime.datetime.now().month
+          # strftime2 = datetime.datetime.strptime("2018-12-31", "%Y-%m-%d")
+          if(dm > cm):
+            break
+        except Exception:
+          # print('')
+          t = None
     back()
   except Exception:
     print("点击(全部)购买记录 crash")
