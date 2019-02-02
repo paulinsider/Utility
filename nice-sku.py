@@ -182,7 +182,7 @@ def run():
     #   sleep(1)
     # # driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
     # sleep(1)
-run()
+# run()
 sleep(1)
 try:
   run()
