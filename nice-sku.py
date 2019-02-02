@@ -103,7 +103,7 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
       beforeSource = None
-      for i in range(100):
+      for i in range(50):
         if ('.shop.record.SkuRecordActivity_' != driver.current_activity):
           break
         driver.swipe(x/2, y * 2 / 3, x/2, 200) # 上拉加载更多
@@ -160,12 +160,17 @@ def run():
   driver.find_element_by_id('com.nice.main:id/tv_search').click()
   for a in range(len(skus)):
     sku = skus[a]
-    
-    driver.find_element_by_id('com.nice.main:id/search_txt').send_keys(sku)
-    sleep(1)
+    try: 
+      driver.find_element_by_id('com.nice.main:id/search_txt').send_keys(sku)
+    except Exception:
+      # adf
+    sleep(0.5)
     oneRowGood()
-    sleep(1)
-    driver.find_element_by_id('com.nice.main:id/search_txt').clear()
+    sleep(0.5)
+    try:
+      driver.find_element_by_id('com.nice.main:id/search_txt').clear()
+    except Exception
+      # 
     # driver.find_element_by_id('com.nice.main:id/tv_search')
     # for i in range(7):
     #   oneRowGood()
