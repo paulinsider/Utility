@@ -16,9 +16,8 @@ desired_caps['platformName'] = 'Android'
 desired_caps['platformVersion'] = '4.4.2' # 要跟模拟器版本完全一致
 desired_caps['noReset'] = True
 desired_caps['deviceName'] = 'Android Emulator'
-desired_caps['appPackage'] = 'com.nice.main'
-desired_caps['appActivity'] = 'com.nice.main.activities.MainActivity_'
-desired_caps['sessionOverride'] = False
+desired_caps['appPackage'] = 'com.shizhuang.duapp'
+desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
 
 os.system("adb\\adb connect 127.0.0.1:62001")
 
@@ -26,40 +25,45 @@ driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
 quantity = 1
 x = 720
 y = 1280
-header = 240
-offsetTop = 337
-goodItem = 442
+header = 146
+goodItem = 354
 recordHeight = 88
+
 rows = 0
 
 def tabShose():
-  driver.find_element_by_android_uiautomator('text("好货")').click()
-  sleep(1)
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
-
-  
 
 def tap1():
   try:
-    driver.tap([(x / 4,     goodItem/2)], 500)
+    driver.tap([(x / 4,     header + goodItem/2)])
   except Exception:
     print("tap 1 Exception")
 def tap2():
   try:
-    driver.tap([(x / 4 * 3, goodItem/2)], 500)
+    driver.tap([(x / 4 * 3, header + goodItem/2)])
   except Exception:
     print("tap 2 Exception")
+def tap3():
+  driver.tap([(x / 4,     header + goodItem/2 * 3)])
+def tap4():
+  driver.tap([(x / 4 * 3, goodItem/2 * 3)])
+def tap5():
+  driver.tap([(x / 4,     header + goodItem/2 * 5)])
+def tap6():
+  driver.tap([(x / 4 * 3, header + goodItem/2 * 5)])
 
-taps = [tap1]
+taps = [tap1, tap2, tap3, tap4, tap5, tap6]
 
-
+def swipePage():
+  driver.swipe(x/2, 1000, x/2, header, 500)
 
 def back():
   os.system("adb\\adb shell input keyevent 4")
 
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
-  driver.swipe(x/2, y - 200, x/2, y - 200 - y * 2 / 3, 500)
+  driver.swipe(360, 700, 360, 246, 500)
   sleep(1)
 
 def soldNum():
@@ -67,20 +71,20 @@ def soldNum():
   global quantity
   soldNum = 10
   try:
-    snEl = driver.find_element_by_id('com.nice.main:id/tv_title')
-    soldNumTxt = snEl.get_attribute('text')
+    soldNumTxt = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_num').get_attribute('text')
     print(quantity, soldNumTxt)
     # 购买记录总条数
     soldNum = re.findall('\d+',soldNumTxt)[0]
   except Exception:
     print(quantity, "获取(全部)购买记录 crash")
   finally:
-    return soldNum
+    return int(soldNum)
 
 onePs = None
 twoPs = None
+
 def gotoAllSold(i):
-  if ('.shop.detail.ShopSkuDetailActivity_' != driver.current_activity):
+  if ('com.shine.ui.mall.ProductDetailActivity' != driver.current_activity):
     return
   global onePs
   global twoPs
@@ -96,17 +100,18 @@ def gotoAllSold(i):
       return
     else:
       twoPs = cPs
+  visiblityAllSold()
   try:
-    sleep(1)
-    allEl = driver.find_element_by_id('com.nice.main:id/tv_all_deal')
+    allEl = driver.find_element_by_id('com.shizhuang.duapp:id/tv_sold_all')
     allEl.click()
     sleep(1) # 进入记录页等待数据加载完成
-    if ('.shop.record.SkuRecordActivity_' == driver.current_activity):
+    if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
       beforeSource = None
-      for i in range(50):
-        if ('.shop.record.SkuRecordActivity_' != driver.current_activity):
+      for i in range(100):
+        if ('com.shine.ui.mall.SoldListActivity' != driver.current_activity):
           break
-        driver.swipe(x/2, y * 2 / 3, x/2, 200) # 上拉加载更多
+        driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
+        
         currentSource = driver.page_source
         if (currentSource == beforeSource):
           break
@@ -114,82 +119,78 @@ def gotoAllSold(i):
           beforeSource = currentSource
 
         try:
-          dates = driver.find_elements_by_id('com.nice.main:id/tv_deal_time')
+          dates = driver.find_elements_by_id('com.shizhuang.duapp:id/tv_date')
           date = dates[-1].get_attribute('text')
-          dm = strftime = datetime.datetime.strptime(date, "%m月%d日")
-
-          cm = datetime.datetime.now().month
-          # strftime2 = datetime.datetime.strptime("2018-12-31", "%Y-%m-%d")
-          if(dm > cm):
+          strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
+          strftime2 = datetime.datetime.strptime("2018-12-31", "%Y-%m-%d")
+          if(strftime < strftime2):
             break
         except Exception:
           # print('')
           t = None
     back()
+    if ('com.shine.ui.trend.TrendAddNewActivity' == driver.current_activity):
+      try:
+        driver.find_element_by_android_uiautomator('text("确定")').click()
+      except Exception:
+        print("click sure back")
   except Exception:
     print("点击(全部)购买记录 crash")
   finally:
     global quantity
     quantity = quantity + 1
 
-
-
 def oneRowGood():
   global rows
   rows = rows + 1
     
-  tap1()
+  tap1() # 点击列表进入详情
   sleep(1)
   if (len(sys.argv) >= 2):
-    gotoAllSold(1)
+    gotoAllSold(1) # 去购买记录
     sleep(1)
   currentActivity = driver.current_activity
-  if ('.shop.detail.ShopSkuDetailActivity_' == currentActivity):
+  if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
     back()
   sleep(1)
 
 def run():
+  tabShose()
+  sleep(1)
   skus = []
-  file = codecs.open("nice-sku.txt", encoding='UTF-8') 
+  file = codecs.open("du-sku.txt", encoding='UTF-8') 
   for line in file:
     line=line.strip('\r\n')
     skus.append(line)
   file.close()
 
-  tabShose()
-  driver.find_element_by_id('com.nice.main:id/tv_search').click()
+  driver.find_element_by_id('com.shizhuang.duapp:id/rl_search').click()
   for a in range(len(skus)):
     sku = skus[a]
     try: 
-      driver.find_element_by_id('com.nice.main:id/search_txt').send_keys(sku)
+      driver.find_element_by_id('com.shizhuang.duapp:id/et_search').send_keys(sku)
+
+      os.system("adb\\adb shell input keyevent 66")
     except Exception:
-      # adf
+      m = 1
+    
     sleep(1)
     oneRowGood()
     sleep(1)
     try:
-      driver.find_element_by_id('com.nice.main:id/search_txt').clear()
-    except Exception
-      # 
-    # driver.find_element_by_id('com.nice.main:id/tv_search')
-    # for i in range(7):
-    #   oneRowGood()
-    #   try:
-    #     driver.swipe(x/2, y/2, x/2, y/2 - goodItem * 9 / 10) # 
-    #   except Exception:
-    #     print("swipe crash")
-
-    #   sleep(1)
-    # # driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
-    # sleep(1)
-# run()
-sleep(1)
+      driver.find_element_by_id('com.nice.main:id/et_search').clear()
+    except Exception:
+      n = 1
+    
+run()
+# 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
+sleep(5)
 try:
   run()
 except Exception:
   print("run crash")
 finally:
-  f = open('nice-rows.txt', 'w')
+  f = open('du-rows.txt', 'w')
   f.write(str(rows))
   f.close
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
