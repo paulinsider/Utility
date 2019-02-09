@@ -18,7 +18,9 @@ desired_caps['noReset'] = True
 desired_caps['deviceName'] = 'Android Emulator'
 desired_caps['appPackage'] = 'com.shizhuang.duapp'
 desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
-
+desired_caps["unicodeKeyboard"] = True
+desired_caps["resetKeyboard"] = True
+# os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
 os.system("adb\\adb connect 127.0.0.1:62001")
 
 driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
@@ -32,6 +34,8 @@ recordHeight = 88
 rows = 0
 
 def tabShose():
+  driver.find_element_by_android_uiautomator('text("购买")').click()
+  sleep(1)
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
 
 def tap1():
@@ -143,16 +147,16 @@ def gotoAllSold(i):
 def oneRowGood():
   global rows
   rows = rows + 1
-    
-  tap1() # 点击列表进入详情
-  sleep(1)
-  if (len(sys.argv) >= 2):
-    gotoAllSold(1) # 去购买记录
+  for i in range(1):
+    taps[i]() # 点击列表进入详情
     sleep(1)
-  currentActivity = driver.current_activity
-  if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
-    back()
-  sleep(1)
+    if (len(sys.argv) >= 2):
+      gotoAllSold(i) # 去购买记录
+      sleep(1)
+    currentActivity = driver.current_activity
+    if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
+      back()
+    sleep(1)
 
 def run():
   tabShose()
@@ -167,9 +171,14 @@ def run():
   driver.find_element_by_id('com.shizhuang.duapp:id/rl_search').click()
   for a in range(len(skus)):
     sku = skus[a]
+    fil = re.compile(u'[^0-9a-zA-Z.，,。？“”]+', re.UNICODE)
+    sku = fil.sub(' ', sku)
+    print(sku)
     try: 
       driver.find_element_by_id('com.shizhuang.duapp:id/et_search').send_keys(sku)
-
+      # inputSku = 'adb\\adb shell input text "' + sku + '"'
+      # print(inputSku)
+      # os.system(inputSku)
       os.system("adb\\adb shell input keyevent 66")
     except Exception:
       m = 1
@@ -178,11 +187,13 @@ def run():
     oneRowGood()
     sleep(1)
     try:
-      driver.find_element_by_id('com.nice.main:id/et_search').clear()
+      driver.find_element_by_id('com.shizhuang.duapp:id/tv_search').click()
+      sleep(0.5)
+      driver.find_element_by_id('com.shizhuang.duapp:id/et_search').clear()
     except Exception:
       n = 1
+    sleep(1)
     
-run()
 # 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(5)
 try:
