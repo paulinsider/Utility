@@ -18,9 +18,9 @@ desired_caps['noReset'] = True
 desired_caps['deviceName'] = 'Android Emulator'
 desired_caps['appPackage'] = 'com.shizhuang.duapp'
 desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
-desired_caps["unicodeKeyboard"] = True
-desired_caps["resetKeyboard"] = True
-# os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
+# desired_caps["unicodeKeyboard"] = True
+# desired_caps["resetKeyboard"] = True
+os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
 os.system("adb\\adb connect 127.0.0.1:62001")
 
 driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
