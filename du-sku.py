@@ -18,9 +18,9 @@ desired_caps['noReset'] = True
 desired_caps['deviceName'] = 'Android Emulator'
 desired_caps['appPackage'] = 'com.shizhuang.duapp'
 desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
-# desired_caps["unicodeKeyboard"] = True
-# desired_caps["resetKeyboard"] = True
-os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
+desired_caps["unicodeKeyboard"] = True
+desired_caps["resetKeyboard"] = True
+# os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
 os.system("adb\\adb connect 127.0.0.1:62001")
 
 driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
@@ -34,10 +34,15 @@ recordHeight = 88
 rows = 0
 
 def tabShose():
-  driver.find_element_by_android_uiautomator('text("购买")').click()
+  try: 
+    driver.find_element_by_android_uiautomator('text("购买")').click()
+  except Exception:
+    a = 1
   sleep(1)
-  driver.find_element_by_android_uiautomator('text("球鞋")').click()
-
+  try:
+    driver.find_element_by_android_uiautomator('text("球鞋")').click()
+  except Exception:
+    b = 1
 def tap1():
   try:
     driver.tap([(x / 4,     header + goodItem/2)])
@@ -159,26 +164,36 @@ def oneRowGood():
     sleep(1)
 
 def run():
+  # driver.start_activity("com.shizhuang.duapp", "com.shine.ui.mall.ProductDetailActivity", "--esn productId, --ez productId 13196")
+  # return
   tabShose()
   sleep(1)
   skus = []
-  file = codecs.open("du-sku.txt", encoding='UTF-8') 
-  for line in file:
-    line=line.strip('\r\n')
-    skus.append(line)
-  file.close()
+  # file = codecs.open("du-sku.txt", encoding='UTF-8') 
+  # for line in file:
+  #   line=line.strip('\r\n')
+  #   skus.append(line)
+  # file.close()
+  with open('du-sku.txt', 'r', encoding='utf-8') as f:
+    skus = f.read().splitlines()
 
   driver.find_element_by_id('com.shizhuang.duapp:id/rl_search').click()
   for a in range(len(skus)):
     sku = skus[a]
-    fil = re.compile(u'[^0-9a-zA-Z.，,。？“”]+', re.UNICODE)
-    sku = fil.sub(' ', sku)
+    # fil = re.compile(u'[^0-9a-zA-Z.，,。？“”]+', re.UNICODE)
+    # sku = fil.sub(' ', sku)
     print(sku)
     try: 
+
+      os.system("adb\\adb shell ime set io.appium.settings/.UnicodeIME")
+      sleep(0.5)
       driver.find_element_by_id('com.shizhuang.duapp:id/et_search').send_keys(sku)
       # inputSku = 'adb\\adb shell input text "' + sku + '"'
       # print(inputSku)
       # os.system(inputSku)
+      os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
+      sleep(0.5)
+      driver.find_element_by_id('com.shizhuang.duapp:id/et_search').click()
       os.system("adb\\adb shell input keyevent 66")
     except Exception:
       m = 1
@@ -196,6 +211,7 @@ def run():
     
 # 等待启动完成。应该精准判断Activity的状态，还没查资料，偷懒直接sleep!!!
 sleep(5)
+run()
 try:
   run()
 except Exception:
