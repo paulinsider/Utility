@@ -141,7 +141,7 @@ def oneRowGood():
       return
     taps[i]() # 点击列表进入详情
     sleep(1)
-    if (len(sys.argv) >= 2):
+    if (len(sys.argv) >= 3):
       gotoAllSold(i) # 去购买记录
       sleep(1)
     currentActivity = driver.current_activity
@@ -152,8 +152,8 @@ def oneRowGood():
 def run():
   tabShose()
   sleep(1)
-  if (len(sys.argv) >= 3):
-    for t in range(int(sys.argv[2])):
+  if (len(sys.argv) >= 2):
+    for t in range(int(sys.argv[1])):
       try:
         driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 
       except Exception:
