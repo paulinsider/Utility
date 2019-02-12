@@ -29,7 +29,6 @@ header = 240
 offsetTop = 337
 goodItem = 442
 recordHeight = 88
-rows = 0
 
 def tabShose():
   driver.find_element_by_android_uiautomator('text("好货")').click()
@@ -134,8 +133,6 @@ def gotoAllSold(i):
 
 
 def oneRowGood():
-  global rows
-  rows = rows + 1
   for i in range(2):
     if ('.activities.MainActivity_' != driver.current_activity):
       return
@@ -179,7 +176,4 @@ try:
 except Exception:
   print("run crash")
 finally:
-  f = open('nice-rows.txt', 'w')
-  f.write(str(rows))
-  f.close
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')

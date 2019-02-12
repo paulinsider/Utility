@@ -164,8 +164,6 @@ def oneRowGood():
     sleep(1)
 
 def run():
-  # driver.start_activity("com.shizhuang.duapp", "com.shine.ui.mall.ProductDetailActivity", "--esn productId, --ez productId 13196")
-  # return
   tabShose()
   sleep(1)
   skus = []

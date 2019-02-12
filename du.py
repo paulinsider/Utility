@@ -28,8 +28,6 @@ header = 146
 goodItem = 354
 recordHeight = 88
 
-rows = 0
-
 def tabShose():
   driver.find_element_by_android_uiautomator('text("球鞋")').click()
 
@@ -83,8 +81,6 @@ onePs = None
 twoPs = None
 
 def gotoAllSold(i):
-  if ('com.shine.ui.mall.ProductDetailActivity' != driver.current_activity):
-    return
   global onePs
   global twoPs
   if (i == 0):
@@ -140,8 +136,6 @@ def gotoAllSold(i):
     quantity = quantity + 1
 
 def oneRowGood():
-  global rows
-  rows = rows + 1
   for i in range(2):
     if ('com.shine.ui.home.HomeActivity' != driver.current_activity):
       return
@@ -183,7 +177,4 @@ try:
 except Exception:
   print("run crash")
 finally:
-  f = open('du-rows.txt', 'w')
-  f.write(str(rows))
-  f.close
   print('[执行结束]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), '<====[执行结束]')
