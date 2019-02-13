@@ -164,7 +164,7 @@ def gotoAllSold(i):
 def oneRowGood():
   global rows
   rows = rows + 1
-  for i in range(1):
+  for i in range(6):
     taps[i]() # 点击列表进入详情
     sleep(1)
     if (len(sys.argv) >= 2):
