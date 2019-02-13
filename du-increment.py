@@ -133,8 +133,11 @@ def gotoAllSold(i):
   finally:
     global quantity
     quantity = quantity + 1
-
+rows = 0
 def oneRowGood():
+  global rows
+  rows = rows + 1
+  print(rows)
   for i in range(2):
     if ('com.shine.ui.home.HomeActivity' != driver.current_activity):
       return

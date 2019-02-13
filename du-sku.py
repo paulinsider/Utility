@@ -54,13 +54,25 @@ def tap2():
   except Exception:
     print("tap 2 Exception")
 def tap3():
-  driver.tap([(x / 4,     header + goodItem/2 * 3)])
+  try:
+    driver.tap([(x / 4,     header + goodItem/2 * 3)])
+  except Exception:
+    print("tap 3 Exception")
 def tap4():
-  driver.tap([(x / 4 * 3, goodItem/2 * 3)])
+  try:
+    driver.tap([(x / 4 * 3, goodItem/2 * 3)])
+  except Exception:
+    print("tap 4 Exception")
 def tap5():
-  driver.tap([(x / 4,     header + goodItem/2 * 5)])
+  try:
+    driver.tap([(x / 4,     header + goodItem/2 * 5)])
+  except Exception:
+    print("tap 5 Exception")
 def tap6():
-  driver.tap([(x / 4 * 3, header + goodItem/2 * 5)])
+  try:
+    driver.tap([(x / 4 * 3, header + goodItem/2 * 5)])
+  except Exception:
+    print("tap 6 Exception")
 
 taps = [tap1, tap2, tap3, tap4, tap5, tap6]
 
