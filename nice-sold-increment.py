@@ -57,12 +57,12 @@ def gotoAllSold():
           dates = driver.find_elements_by_id('com.nice.main:id/tv_deal_time')
           for m in range(len(dates)):
             date = dates[m].get_attribute('text')
-            if(date == "2天前"):
+            if(date == "2天前" or date == "3天前" or date == "2天前" or date == "4天前" or date == "5天前" or date == "6天前"):
               isBreak = True # 跳出外层循环
               break
           date = dates[-1].get_attribute('text')
           strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
-          strftime2 = datetime.datetime.strptime("2019-1-30", "%Y-%m-%d")
+          strftime2 = datetime.datetime.strptime("2019-2-10", "%Y-%m-%d")
           if(strftime < strftime2):
             break
         except Exception:
