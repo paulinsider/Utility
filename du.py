@@ -49,7 +49,7 @@ def swipePage():
   driver.swipe(x/2, 1000, x/2, header, 500)
 
 def back():
-  os.system("adb\\adb shell input keyevent 4")
+  os.system("adb\\adb -s 127.0.0.1:62001 shell input keyevent 4")
 
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
