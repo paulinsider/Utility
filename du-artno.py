@@ -9,21 +9,12 @@ import sys
 import datetime
 import codecs
 
+import duConnect
+
 print('[执行开始]====>', time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), "<====[执行开始]")
 
-desired_caps = {}
-desired_caps['platformName'] = 'Android'
-desired_caps['platformVersion'] = '4.4.2' # 要跟模拟器版本完全一致
-desired_caps['noReset'] = True
-desired_caps['deviceName'] = 'Android Emulator'
-desired_caps['appPackage'] = 'com.shizhuang.duapp'
-desired_caps['appActivity'] = 'com.shine.ui.home.SplashActivity'
-desired_caps["unicodeKeyboard"] = True
-desired_caps["resetKeyboard"] = True
-# os.system("adb\\adb shell ime set com.sohu.inputmethod.sogou/.SogouIME")
-os.system("adb\\adb connect 127.0.0.1:62001")
+driver = duConnect.connect()
 
-driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
 quantity = 1
 x = 720
 y = 1280
