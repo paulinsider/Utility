@@ -107,8 +107,13 @@ def gotoAllSold(i):
         try:
           dates = driver.find_elements_by_id('com.shizhuang.duapp:id/tv_date')
           date = dates[-1].get_attribute('text')
-          strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
-          strftime2 = datetime.datetime.strptime("2018-12-31", "%Y-%m-%d")
+          strftime = None
+          try:
+            strftime = datetime.datetime.strptime(date, "%Y年%m月%d日")
+          except Exception:
+            strftime = datetime.datetime.strptime('2019年' + date, "%Y年%m月%d日")
+
+          strftime2 = datetime.datetime.strptime("2019-1-30", "%Y-%m-%d")
           if(strftime < strftime2):
             break
         except Exception:

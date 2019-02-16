@@ -48,7 +48,7 @@ def gotoAllSold():
           except Exception:
             strftime = datetime.datetime.strptime('2019年' + date, "%Y年%m月%d日")
           
-          beforeDate = "2018-12-31"
+          beforeDate = "2019-1-30"
           if (len(sys.argv) >= 2):
             beforeDate = sys.argv[1]
           strftime2 = datetime.datetime.strptime(beforeDate, "%Y-%m-%d")
