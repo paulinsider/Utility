@@ -24,12 +24,6 @@ goodItem = 442
 recordHeight = 88
 rows = 0
 
-def tabShose():
-  driver.find_element_by_android_uiautomator('text("好货")').click()
-  sleep(1)
-  driver.find_element_by_android_uiautomator('text("球鞋")').click()
-
-  
 
 def tap1():
   try:
@@ -44,10 +38,6 @@ def tap2():
 
 taps = [tap1]
 
-
-
-def back():
-  os.system("adb\\adb shell input keyevent 4")
 
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
@@ -117,7 +107,7 @@ def gotoAllSold(i):
         except Exception:
           # print('')
           t = None
-    back()
+    niceConnect.back()
   except Exception:
     print("点击(全部)购买记录 crash")
   finally:
@@ -137,7 +127,7 @@ def oneRowGood():
     sleep(1)
   currentActivity = driver.current_activity
   if ('.shop.detail.ShopSkuDetailActivity_' == currentActivity):
-    back()
+    niceConnect.back()
   sleep(1)
 
 def run():
@@ -148,7 +138,7 @@ def run():
     skus.append(line)
   file.close()
 
-  tabShose()
+  niceConnect.tabShose(driver)
   driver.find_element_by_id('com.nice.main:id/tv_search').click()
   for a in range(len(skus)):
     sku = skus[a]

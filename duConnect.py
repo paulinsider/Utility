@@ -1,6 +1,7 @@
 #coding=utf-8
 from appium import webdriver
 import os
+from time import sleep
 
 def connect():
   desired_caps = {}
@@ -16,3 +17,16 @@ def connect():
 
   driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
   return driver
+
+def tabShose(driver):
+  try:
+    driver.find_element_by_android_uiautomator('text("购买")').click()
+  except Exception:
+    print("tap 购买 Exception")
+  try:
+    driver.find_element_by_android_uiautomator('text("球鞋")').click()
+  except Exception:
+    print("tap 球鞋 Exception")
+
+def back():
+  os.system("adb\\adb -s 127.0.0.1:62001 shell input keyevent 4")

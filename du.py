@@ -21,8 +21,7 @@ header = 146
 goodItem = 354
 recordHeight = 88
 
-def tabShose():
-  driver.find_element_by_android_uiautomator('text("球鞋")').click()
+
 
 def tap1():
   try:
@@ -48,8 +47,7 @@ taps = [tap1, tap2, tap3, tap4, tap5, tap6]
 def swipePage():
   driver.swipe(x/2, 1000, x/2, header, 500)
 
-def back():
-  os.system("adb\\adb -s 127.0.0.1:62001 shell input keyevent 4")
+
 
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
@@ -116,7 +114,7 @@ def gotoAllSold(i):
         except Exception:
           # print('')
           t = None
-    back()
+    duConnect.back()
     if ('com.shine.ui.trend.TrendAddNewActivity' == driver.current_activity):
       try:
         driver.find_element_by_android_uiautomator('text("确定")').click()
@@ -139,11 +137,11 @@ def oneRowGood():
       sleep(1)
     currentActivity = driver.current_activity
     if ('com.shine.ui.mall.ProductDetailActivity' == currentActivity):
-      back()
+      duConnect.back()
     sleep(1)
 
 def run():
-  tabShose()
+  duConnect.tabShose(driver)
   sleep(1)
   if (len(sys.argv) >= 2):
     for t in range(int(sys.argv[1])):

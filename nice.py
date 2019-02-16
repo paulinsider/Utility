@@ -22,12 +22,6 @@ offsetTop = 337
 goodItem = 442
 recordHeight = 88
 
-def tabShose():
-  driver.find_element_by_android_uiautomator('text("好货")').click()
-  sleep(1)
-  driver.find_element_by_android_uiautomator('text("球鞋")').click()
-
-  
 
 def tap1():
   try:
@@ -44,8 +38,7 @@ taps = [tap1, tap2]
 
 
 
-def back():
-  os.system("adb\\adb shell input keyevent 4")
+
 
 def visiblityAllSold():
   # 向上滑动，购买记录元素可视
@@ -115,7 +108,7 @@ def gotoAllSold(i):
         except Exception:
           # print('')
           t = None
-    back()
+    niceConnect.back()
   except Exception:
     print("点击(全部)购买记录 crash")
   finally:
@@ -135,11 +128,11 @@ def oneRowGood():
       sleep(1)
     currentActivity = driver.current_activity
     if ('.shop.detail.ShopSkuDetailActivity_' == currentActivity):
-      back()
+      niceConnect.back()
     sleep(1)
 
 def run():
-  tabShose()
+  niceConnect.tabShose(driver)
   sleep(1)
   driver.swipe(x/2, offsetTop + goodItem + header, x/2, goodItem + header)
   sleep(1)
@@ -161,7 +154,7 @@ def run():
       sleep(1)
     # driver.swipe(x/2, y/2, x/2, y/2 - goodItem) # 加载更多
     sleep(1)
-
+run
 sleep(1)
 try:
   run()

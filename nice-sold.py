@@ -24,9 +24,6 @@ goodItem = 442
 recordHeight = 88
 rows = 0
 
-def back():
-  os.system("adb\\adb shell input keyevent 4")
-
 def gotoAllSold():
   try:
     sleep(0.5)
@@ -60,7 +57,7 @@ def gotoAllSold():
         except Exception:
           # print('')
           t = None
-    back()
+    niceConnect.back()
     sleep(0.5)
   except Exception:
     print("点击(全部)购买记录 crash")
