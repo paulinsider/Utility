@@ -116,6 +116,14 @@ def gotoAllSold(i):
           strftime2 = datetime.datetime.strptime("2019-1-30", "%Y-%m-%d")
           if(strftime < strftime2):
             break
+
+          try:
+            strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
+          except Exception:
+            strftime = datetime.datetime.strptime('2019.' + date, "%Y.%m.%d")
+
+          if(strftime < strftime2):
+            break
         except Exception:
           # print('')
           t = None
