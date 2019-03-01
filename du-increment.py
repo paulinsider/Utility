@@ -104,11 +104,19 @@ def gotoAllSold(i):
           dates = driver.find_elements_by_id('com.shizhuang.duapp:id/tv_date')
           date = dates[-1].get_attribute('text')
           
-          if(date == "2天前" or date == "3天前" or date == "2天前" or date == "4天前" or date == "5天前" or date == "6天前"):
+          if(date == "4天前" or date == "5天前" or date == "6天前"):
             break
           
           strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
-          strftime2 = datetime.datetime.strptime("2019-2-15", "%Y-%m-%d")
+          strftime2 = datetime.datetime.strptime("2019-2-25", "%Y-%m-%d")
+          if(strftime <= strftime2):
+            break
+        
+          try:
+            strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
+          except Exception:
+            strftime = datetime.datetime.strptime('2019.' + date, "%Y.%m.%d")
+          strftime2 = datetime.datetime.strptime("2019.2.25", "%Y.%m.%d")
           if(strftime <= strftime2):
             break
           
@@ -129,12 +137,13 @@ def gotoAllSold(i):
 rows = 0
 def oneRowGood():
   global rows
-  rows = rows + 1
-  print(rows)
+  
   for i in range(2):
     if ('com.shine.ui.home.HomeActivity' != driver.current_activity):
       return
     taps[i]() # 点击列表进入详情
+    rows = rows + 1
+    print(rows)
     sleep(1)
     if (len(sys.argv) >= 3):
       gotoAllSold(i) # 去购买记录

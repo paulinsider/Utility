@@ -93,7 +93,7 @@ def gotoAllSold(i):
     sleep(1) # 进入记录页等待数据加载完成
     if ('com.shine.ui.mall.SoldListActivity' == driver.current_activity):
       beforeSource = None
-      for i in range(500):
+      for i in range(300):
         if ('com.shine.ui.mall.SoldListActivity' != driver.current_activity):
           break
         driver.swipe(x/2, y - recordHeight, x/2, y - 11 * recordHeight) # 每页20条数据
@@ -113,7 +113,7 @@ def gotoAllSold(i):
           except Exception:
             strftime = datetime.datetime.strptime('2019年' + date, "%Y年%m月%d日")
 
-          strftime2 = datetime.datetime.strptime("2019-2-15", "%Y-%m-%d")
+          strftime2 = datetime.datetime.strptime("2019-2-25", "%Y-%m-%d")
           if(strftime <= strftime2):
             break
 
@@ -121,7 +121,7 @@ def gotoAllSold(i):
             strftime = datetime.datetime.strptime(date, "%Y.%m.%d")
           except Exception:
             strftime = datetime.datetime.strptime('2019.' + date, "%Y.%m.%d")
-          strftime2 = datetime.datetime.strptime("2019.2.15", "%Y.%m.%d")
+          strftime2 = datetime.datetime.strptime("2019.2.25", "%Y.%m.%d")
           if(strftime <= strftime2):
             break
         except Exception:
